@@ -15,6 +15,13 @@ int GetOpcode(int Input)
     return Input % 100;
 }
 
+
+bool sortbysec(const std::pair<std::vector<int>, int> &a,
+               const std::pair<std::vector<int>, int> &b)
+{
+    return (a.second < b.second);
+}
+
 std::string GetPaddedString(int Input, int Opcode)
 {
     std::string aux = SSTR(Input);
@@ -42,7 +49,7 @@ std::string GetPaddedString(int Input, int Opcode)
         break;
     }
 
-   // std::cout << "Padded Opcode: " << aux << std::endl;
+    // std::cout << "Padded Opcode: " << aux << std::endl;
 
     return aux;
 }
@@ -91,8 +98,8 @@ int RunComputer(std::vector<int> Code, int PhaseSetting, int Input)
             CalcIndexAux = Calc1 + Calc2;
             Code[CalcIndexResult] = CalcIndexAux;
 
-              // std::cout << "Parameters: " << Code[Index + 1] << " and " << Code[Index + 2] << " and " << Code[Index + 3] << std::endl;
-              // std::cout << "Added " << Calc1 << " and " << Calc2 << " and pushed to " << CalcIndexResult << std::endl;
+            // std::cout << "Parameters: " << Code[Index + 1] << " and " << Code[Index + 2] << " and " << Code[Index + 3] << std::endl;
+            // std::cout << "Added " << Calc1 << " and " << Calc2 << " and pushed to " << CalcIndexResult << std::endl;
 
             Index += 4; //IP incrementing
             break;
@@ -136,14 +143,14 @@ int RunComputer(std::vector<int> Code, int PhaseSetting, int Input)
             {
                 PhaseSet = true;
                 Code[CalcIndexResult] = PhaseSetting;
-               // std::cout << "Phase setting set to " << PhaseSetting << std::endl;
+                // std::cout << "Phase setting set to " << PhaseSetting << std::endl;
             }
             else
             {
                 Code[CalcIndexResult] = Input;
-              //  std::cout << "Input set to " << Input << std::endl;
+                //  std::cout << "Input set to " << Input << std::endl;
             }
-            
+
             Index += 2;
             break;
 
@@ -160,8 +167,6 @@ int RunComputer(std::vector<int> Code, int PhaseSetting, int Input)
                 std::cout << Code[Index + 1] << std::endl;
                 Output = Code[Index + 1];
             }
-
-
 
             Index += 2;
             break;
@@ -203,7 +208,7 @@ int RunComputer(std::vector<int> Code, int PhaseSetting, int Input)
                 MemLocation = Code[Index + 1];
                 Calc1 = Code[MemLocation];
             }
-             if (PaddedString[0] == '1') //Param 2
+            if (PaddedString[0] == '1') //Param 2
                 Calc2 = Code[Index + 2];
             else
             {
@@ -288,12 +293,12 @@ int RunComputer(std::vector<int> Code, int PhaseSetting, int Input)
 
 int main()
 {
-    std::ifstream myfile("Day7Input1.txt"); // hardcoded because lazy
+    std::ifstream myfile("Day7Input.txt"); // hardcoded because lazy
     int input = 0;
     std::vector<int> Code;
     std::string PaddedString;
     std::vector<int> ThrusterInput;
-    std::vector<std::pair<std::vector<int>,int>> Results;
+    std::vector<std::pair<std::vector<int>, int>> Results;
 
     if (myfile.is_open())
     {
@@ -307,7 +312,7 @@ int main()
     else
         std::cout << "Unable to open file";
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 5; i++)
         ThrusterInput.push_back(i);
 
     do
@@ -320,11 +325,10 @@ int main()
         Results.push_back(std::make_pair(ThrusterInput, input));
         std::cout << input << std::endl;
 
-
     } while (std::next_permutation(ThrusterInput.begin(), ThrusterInput.end()));
 
     sort(Results.begin(), Results.end(), sortbysec);
-    std::cout << Results[Results.size].second << std::endl;
+    std::cout << Results.back().second << std::endl;
 
     return 0;
 }
